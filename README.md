@@ -1,7 +1,7 @@
 # Pathfinding-Visualisation
 A visual interface for Dijkstra's algorithm and A* Algorithm
 
-#Demo Page
+# Demo-Page
 https://oliverdevscode.github.io/Pathfinding-Visualisation/
 
 # How-to-use
