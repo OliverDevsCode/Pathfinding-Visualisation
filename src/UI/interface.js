@@ -8,8 +8,13 @@ let optionDropDown;
 let solveButton;
 let startSelect;
 let goalSelect;
+let resetButton;
 
-let Autograph = new Graph(); //called autograph for automated testing
+let pathText;
+let costText;
+
+
+let graph = new Graph(); //called graph for automated testing
 
 let options = ["Dijkstra","A*"]
 
@@ -22,6 +27,7 @@ function createUI(){
   solveButton = createButton("Solve Button")
   startSelect = createSelect()
   goalSelect = createSelect()
+  resetButton = createButton("Reset")
 }
 
 
@@ -72,8 +78,38 @@ function solveGraph(){
   let goal =  nodes[goalSelect.value()-1]
   if(optionDropDown.value() == "Dijkstra" && (start != "" && goal != "")){
     console.log("Starting Dijkstra")
-    Autograph.DijkstraSearch(start,goal) //The values in the box need altering since they are referneces not the actual nodes
-
-
+    drawResults(graph.DijkstraSearch(start,goal)) //The values in the box need altering since they are referneces not the actual nodes
   }
+}
+
+function drawResults([path,cost]){
+  if(pathText != undefined){
+    pathText.remove()
+  }
+  //Turn path into readable format
+  let formatPath = ""
+  for(let i = 0; i < path.length; i++){
+    if(i == path.length-1){
+      formatPath += path[i] + " " 
+    }else{
+      formatPath += path[i] + " " + ">" +" "
+    }
+  }
+  rect(width,height-20,100,20)
+  pathText = createP(`Path: ${formatPath} Cost: ${cost}`)
+
+}
+
+function reset(){
+  nodes =[]
+  graph = new Graph();
+  if(pathText != undefined){
+    pathText.remove()
+  }
+  startSelect.remove()
+  goalSelect.remove()
+  resetButton.remove()
+  startSelect = createSelect()
+  goalSelect = createSelect()
+  resetButton = createButton("Reset")
 }
