@@ -41,6 +41,20 @@ function linkNodes(nodesToLink){
     cost = Math.floor(cost/50)
     console.log(cost)
 
+    //add each the nodes to each other nodes neighbours + cost
+
+    //find each node in the Nodes array
+    for(let i =0; i < nodes.length;i++){
+      if(nodes[i]==nodesToLink[0]){
+        nodes[i].addNeighbour(nodesToLink[1],cost)
+        console.log("Node 1 after link",nodes[i])
+      }
+      if(nodes[i]==nodesToLink[1]){
+        nodes[i].addNeighbour(nodesToLink[0],cost)
+        console.log("Node 2 after link",nodes[i])
+
+      }
+    }
 
   }
 }
