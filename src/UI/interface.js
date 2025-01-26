@@ -31,7 +31,24 @@ function addNodeToGraph(){
   mode = "Add Node"
 }
 
-function linkNodes(){
+function linkNodes(nodesToLink){
+  console.log(nodesToLink)
+  //when nodesToLink length = 2, perform link process
+  if(nodesToLink.length =2){
+    //calculate distance for cost
+    let cost = dist(nodesToLink[0].x,nodesToLink[0].y,nodesToLink[1].x,nodesToLink[1].y)
+    //Make the Cost smaller and easier to read
+    cost = Math.floor(cost/50)
+    console.log(cost)
+
+
+  }
+}
+
+
+let nodesToLink = [];
+function setModeLink(){
   clicks = 0
   mode = "Link Node"
+  nodesToLink = [];
 }

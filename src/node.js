@@ -24,7 +24,7 @@ class Node{
 
   addNeighbour(node,cost){
     this.neighbours.push([node,cost])
-    console.log(this.neighbours)
+    // console.log(this.neighbours)
   }
 
 

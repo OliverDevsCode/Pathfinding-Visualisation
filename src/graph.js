@@ -7,7 +7,7 @@ class Graph{
 
   addNode(node){
     this.adjacencyList.push([node])
-    console.log(this.adjacencyList)
+    // console.log(this.adjacencyList)
   }
 
   DijkstraSearch(start,goal){

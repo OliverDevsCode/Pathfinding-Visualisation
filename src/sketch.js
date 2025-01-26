@@ -27,7 +27,7 @@ function setup() {
   graph.addNode(node3)
   graph.addNode(node4)
 
-  graph.DijkstraSearch(node2,node3) //returns [path,cost]
+  // graph.DijkstraSearch(node2,node3) //returns [path,cost]
 
 }
 
@@ -36,21 +36,33 @@ function draw() {
   graph.draw() 
   Autograph.draw()
   addButton.mousePressed(addNodeToGraph)
-  linkButton.mousePressed(linkNodes)
+  linkButton.mousePressed(setModeLink)
 }
 
 function doubleClicked(){
 
   if(mode == "Link Node"){
-    if(clicks >= 2){
-      console.log("Mode Reset")
-      mode = "view"
-      clicks = 0
-    }else{
       console.log("Node Clicked")
-    clicks ++
-    } 
+      //calculate if node pressed
+      for(let i = 0; i < nodes.length;i++){
+        range = dist(mouseX,mouseY,nodes[i].x,nodes[i].y)
+        if(range < 50){
+          console.log("In Range")
+          nodesToLink.push(nodes[i])
+          clicks ++
+          if(clicks > 1){
+            linkNodes(nodesToLink)
+            console.log("Mode Reset")
+            mode = "view"
+            clicks = 0
+          }
+        }
+      }
+    
   }
+  
+  
+
 
   if(mode == "Add Node"){
     let num = nodes.length + 1
