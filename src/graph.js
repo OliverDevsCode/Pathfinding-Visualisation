@@ -160,6 +160,7 @@ class Graph{
 
   draw(){
     for(let i=0; i < this.adjacencyList.length;i++){
+      if(this.adjacencyList[i][0].neighbours != undefined){
       for(let j =0; j < this.adjacencyList[i][0].neighbours.length;j++){
         line(this.adjacencyList[i][0].x,this.adjacencyList[i][0].y,this.adjacencyList[i][0].neighbours[j][0].x,this.adjacencyList[i][0].neighbours[j][0].y)
         let midpoint = [(this.adjacencyList[i][0].x+this.adjacencyList[i][0].neighbours[j][0].x)/2,(this.adjacencyList[i][0].y+this.adjacencyList[i][0].neighbours[j][0].y)/2]
@@ -168,6 +169,7 @@ class Graph{
         text(this.adjacencyList[i][0].neighbours[j][1],midpoint[0],midpoint[1])
         pop()
       }
+    }
     }
     for(let i=0; i < this.adjacencyList.length;i++){
       this.adjacencyList[i][0].draw()
