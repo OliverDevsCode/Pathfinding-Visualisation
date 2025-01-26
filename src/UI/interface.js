@@ -82,7 +82,7 @@ function solveGraph(){
   }
 }
 
-function drawResults([path,cost]){
+function drawResults([path,cost,table]){
   if(pathText != undefined){
     pathText.remove()
   }
@@ -97,6 +97,21 @@ function drawResults([path,cost]){
   }
   rect(width,height-20,100,20)
   pathText = createP(`Path: ${formatPath} Cost: ${cost}`)
+  pathText.style('font-family', 'Consolas')
+  //format table
+  for(let i = 0; i< table.length;i++){
+    if(table[i][3] != null){
+      table[i][3] =table[i][3].num
+    }
+    table[i][1] =table[i][1].num
+  }
+
+  let formattedTable = [["Pick","Node","Cost","Parent"]]
+  for(let i = 0; i < table.length; i++){
+    formattedTable.push(table[i])
+  }
+
+  console.table(formattedTable)
 
 }
 

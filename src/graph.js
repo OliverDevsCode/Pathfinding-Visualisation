@@ -153,7 +153,7 @@ class Graph{
     //reverse path
     path.reverse()
     console.log("Path", path)
-    return [path,cost]
+    return [path,cost,table]
 
   }
 
