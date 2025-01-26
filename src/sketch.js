@@ -37,6 +37,7 @@ function draw() {
   Autograph.draw()
   addButton.mousePressed(addNodeToGraph)
   linkButton.mousePressed(setModeLink)
+  solveButton.mousePressed(solveGraph)
 }
 
 function doubleClicked(){
@@ -61,9 +62,6 @@ function doubleClicked(){
     
   }
   
-  
-
-
   if(mode == "Add Node"){
     let num = nodes.length + 1
     let node = new Node(mouseX,mouseY,num)

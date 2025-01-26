@@ -66,3 +66,14 @@ function setModeLink(){
   mode = "Link Node"
   nodesToLink = [];
 }
+
+function solveGraph(){
+  let start = nodes[startSelect.value()-1]
+  let goal =  nodes[goalSelect.value()-1]
+  if(optionDropDown.value() == "Dijkstra" && (start != "" && goal != "")){
+    console.log("Starting Dijkstra")
+    Autograph.DijkstraSearch(start,goal) //The values in the box need altering since they are referneces not the actual nodes
+
+
+  }
+}
