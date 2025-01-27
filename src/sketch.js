@@ -10,5 +10,4 @@ function draw() {
   linkButton.mousePressed(setModeLink)
   solveButton.mousePressed(solveGraph)
   resetButton.mousePressed(reset)
-  exportButton.mousePressed(exportGraph)
 }
