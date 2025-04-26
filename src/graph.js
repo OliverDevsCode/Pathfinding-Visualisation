@@ -1,179 +1,98 @@
-class Graph{
+class Graph {
   adjacencyList;
 
-  constructor(){
-    this.adjacencyList = []
+  constructor() {
+    // Just an array of Node instances (no [node] wrapper)
+    this.adjacencyList = [];
   }
 
-  addNode(node){
-    this.adjacencyList.push([node])
-    // console.log(this.adjacencyList)
+  addNode(node) {
+    this.adjacencyList.push(node);
   }
 
-  DijkstraSearch(start,goal){
-    let path = []
+  DijkstraSearch(start, goal) {
+    let path = [];
     let cost = 0;
     let table = [];
-    //populate table
-    //Structure Pick, Node, Cost, Parent
-    for(let i = 0; i < this.adjacencyList.length;i++){
-      if(this.adjacencyList[i][0]==start){
-        table.push([1,this.adjacencyList[i][0],null,null])
-      }else{
-        table.push([null,this.adjacencyList[i][0],Infinity,undefined])
+
+    // populate table: pickOrder, node, cost, parent
+    // start node cost=0, all others = Infinity
+    for (let node of this.adjacencyList) {
+      if (node === start) {
+        table.push([1, node, 0,    null]);
+      } else {
+        table.push([null, node, Infinity, null]);
       }
     }
-    //OUTPUT THE TABLE
-    console.table(table)
+    console.table(table);
 
-    //Perform the algorithm
-    let visted = []
-    let startNode;
-    for(let i = 0; i <table.length; i++){
-      if(table[i][0] == 1){
-        startNode = table[i][1]
+    let visitOrder = 1;
+
+    let startRow = table.find(r => r[1] === start);
+    for (let [nbr, w] of start.neighbours) {
+      let nbrRow = table.find(r => r[1] === nbr);
+      if (w < nbrRow[2]) {
+        nbrRow[2] = w;
+        nbrRow[3] = start;
       }
     }
-    console.log(`Start Node ${startNode.num}`)
-    //Check neigbours of node
-    for(let i = 0; i < startNode.neighbours.length;i++){
-      let nodeToCheck = startNode.neighbours[i][0]
-      let nodeCost = startNode.neighbours[i][1]
-      console.log("Node:",nodeToCheck,"Cost:",nodeCost)
-      //Find Node on table
-      for(let j = 0; j <table.length;j++){
-        if(table[j][1] == nodeToCheck){
-          //Now Check Price and Update Parent
-          console.log("Found, Cost =",table[j][2])
-          console.log("Found, Parent =",table[j][3])
+    
 
-
-          if(table[j][2]>nodeCost){
-            //Changing Cost
-            table[j][2] = nodeCost
-            table[j][3] = startNode
-
-            //Verify Update
-            console.log("Cost =",table[j][2])
-            console.log("Parent =",table[j][3])
-
-          }
-          
-        }
-      }//Update Table While
-    }//First Node While
-
-    visted.push(startNode.num)//.num for debugging
-
-    //Table after first update
-    console.log("Table after first visit")
-    console.table(table)
-
-    //Loop over all the other nodes now
-    for(let k = 0; k < table.length-1;k++){ //change back to table.length-1 - was for testing only
-      let nextNode = Infinity;
-      let tableRow; //for add previous cost
-      for(let j=0; j<table.length;j++){
-        if(table[j][0] == null){
-          if(table[j][2] < nextNode){
-            nextNode = table[j][1]
-            visted.push(nextNode.num)
-            table[j][0] = visted.length
-            tableRow = j
-          }
+    while (true) {
+      let smallestCost = Infinity;
+      let nextIndex = -1;
+      for (let i = 0; i < table.length; i++) {
+        if (table[i][0] === null && table[i][2] < smallestCost) {
+          smallestCost = table[i][2];
+          nextIndex = i;
         }
       }
-      //Checking Next Node
-      console.log("Next Node =",nextNode.num)
+      if (nextIndex < 0) break;             // no more reachable nodes
+      visitOrder++;
+      table[nextIndex][0] = visitOrder;     // mark as picked
+      let [ , currentNode, currentCost ] = table[nextIndex];
+      console.log(`Visiting node: ${currentNode.num} , cost: ${currentCost}`);
 
-      //Check neigbours of node
-      for(let i = 0; i < nextNode.neighbours.length;i++){
-        let nodeToCheck = nextNode.neighbours[i][0]
-        let nodeCost = nextNode.neighbours[i][1]
-        console.log("Node:",nodeToCheck,"Cost:",nodeCost)
-        //Find Node on table
-        for(let j = 0; j <table.length;j++){
-          if(table[j][1] == nodeToCheck){
-            //Now Check Price and Update Parent
-            console.log("Found, Cost =",table[j][2])
-            console.log("Found, Parent =",table[j][3])
-
-
-            if(table[j][2]>nodeCost + table[tableRow][2]){
-              //Changing Cost
-              table[j][2] = nodeCost + table[tableRow][2]
-              table[j][3] = nextNode
-
-              //Verify Update
-              console.log("Cost =",table[j][2] + table[tableRow][2])
-              console.log("Parent =",table[j][3])
-
-            }
-            
-          }
-        }//Update Table While
-
-      //Table after node visted
-    }//First Node While
-    console.log("Table after node visit")
-    console.table(table)
-    }
-
-    console.log("Order visted =",visted)
-
-    //Table after all visted
-    console.log("--------------------------------------------------")
-    console.log("--------------------------------------------------")
-    console.log("Complete Table")
-    console.table(table)
-
-    //Calculate the route cost
-    let goal_index;
-    for(let i =0;i<table.length; i++){
-      if(table[i][1]==goal){
-        cost = table[i][2]
-        goal_index = i
-      }
-    }
-
-    console.log("Cost of path =", cost)
-
-    //calculate path
-    path.push(table[goal_index][1].num)
-    let nextNode = table[goal_index][3]
-    while(nextNode != null){
-      for(let i = 0; i < table.length;i++){
-        if(table[i][1]==nextNode){
-          path.push(table[i][1].num)
-          nextNode = table[i][3]
+      for (let [nbr, w] of currentNode.neighbours) {
+        let nbrRow = table.find(r => r[1] === nbr);
+        let alt = currentCost + w;
+        if (alt < nbrRow[2]) {
+          nbrRow[2] = alt;
+          nbrRow[3] = currentNode;
         }
       }
+      
     }
 
-    //reverse path
-    path.reverse()
-    console.log("Path", path)
-    return [path,cost,table]
+    // 4) Reconstruct path + cost
+    let goalRow = table.find(r => r[1] === goal);
+    cost = goalRow[2];
+    let cursor = goalRow[1];
+    while (cursor) {
+      path.push(cursor.num);
+      let parent = table.find(r => r[1] === cursor)[3];
+      cursor = parent;
+    }
+    path.reverse();
 
+    console.log(`Path: [${path.join(" → ")}], Cost: ${cost}`);
+    return [path, cost, table];
   }
 
-
-  draw(){
-    for(let i=0; i < this.adjacencyList.length;i++){
-      if(this.adjacencyList[i][0].neighbours != undefined){
-      for(let j =0; j < this.adjacencyList[i][0].neighbours.length;j++){
-        line(this.adjacencyList[i][0].x,this.adjacencyList[i][0].y,this.adjacencyList[i][0].neighbours[j][0].x,this.adjacencyList[i][0].neighbours[j][0].y)
-        let midpoint = [(this.adjacencyList[i][0].x+this.adjacencyList[i][0].neighbours[j][0].x)/2,(this.adjacencyList[i][0].y+this.adjacencyList[i][0].neighbours[j][0].y)/2]
-        push()
-        textSize(25)
-        text(this.adjacencyList[i][0].neighbours[j][1],midpoint[0],midpoint[1])
-        pop()
+  draw() {
+    for (let node of this.adjacencyList) {
+      for (let [nbr, w] of node.neighbours) {
+        line(node.x, node.y, nbr.x, nbr.y);
+        let midX = (node.x + nbr.x) / 2;
+        let midY = (node.y + nbr.y) / 2;
+        push();
+          textSize(25);
+          text(w, midX, midY);
+        pop();
       }
     }
-    }
-    for(let i=0; i < this.adjacencyList.length;i++){
-      this.adjacencyList[i][0].draw()
+    for (let node of this.adjacencyList) {
+      node.draw();
     }
   }
-
 }
